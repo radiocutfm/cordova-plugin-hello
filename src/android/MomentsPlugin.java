@@ -7,7 +7,7 @@ import com.lotadata.moments.MomentsClient;
 import com.lotadata.moments.Moments;
 
 public class MomentsPlugin extends CordovaPlugin {
-    private Moments momentsClient;
+    private Moments momentsClient = null;
 
     @Override
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
@@ -28,7 +28,7 @@ public class MomentsPlugin extends CordovaPlugin {
     }
 
     protected void onDestroy() {
-        if (momentsClient) {
+        if (momentsClient != null) {
             momentsClient.disconnect();
         }
         super.onDestroy();
