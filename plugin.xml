@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
-        id="com.lotadata.moments.MomentsPlugin"
+        id="cordova-plugin-ld-moments-sdk"
         version="0.1.0">
 
   <name>Moments SDK</name>
@@ -9,21 +9,24 @@
     <engine name="cordova" version=">=3.4.0"/>
   </engines>
 
-  <asset src="www/hello.js" target="js/hello.js"/>
+  <asset src="www/moments.js" target="js/moments.js"/>
 
-  <js-module src="www/hello.js" name="hello">
-    <clobbers target="hello" />
+  <js-module src="www/moments.js" name="moments">
+    <clobbers target="moments" />
   </js-module>
 
   <platform name="android">
 
     <config-file target="res/xml/config.xml" parent="/*">
-      <feature name="Hello">
-        <param name="android-package" value="com.example.plugin.Hello"/>
+      <feature name="MomentsPlugin">
+        <param name="android-package" value="com.lotadata.moments.plugin.MomentsPlugin"/>
       </feature>
     </config-file>
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <service android:name="com.lotadata.moments.MomentsService" android:exported="false"/>
+    </config-file>
 
-    <source-file src="src/android/Hello.java" target-dir="src/com/example/plugin/"/>
+    <source-file src="src/android/MomentsPlugin.java" target-dir="src/com/example/plugin/"/>
     <source-file src="moments-sdk-latest.jar" target-dir="libs"/>
     <framework src="src/android/extras.gradle" custom="true" type="gradleReference"/>
   </platform>
