@@ -27,7 +27,7 @@ public class MomentsPlugin extends CordovaPlugin {
         }
     }
 
-    protected void onDestroy() {
+    public void onDestroy() {
         if (momentsClient != null) {
             momentsClient.disconnect();
         }
