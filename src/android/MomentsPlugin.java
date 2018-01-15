@@ -16,8 +16,11 @@ public class MomentsPlugin extends CordovaPlugin {
 
             String api_key = data.getString(0);
             momentsClient = MomentsClient.getInstance(this.cordova.getActivity(), api_key);
-            callbackContext.success("Connected!");
-
+            if (momentsClient != null) {
+                callbackContext.success("Connected!");
+            } else {
+                callbackContext.error("Error, momentsClient == null");
+            }
             return true;
 
         } else {
