@@ -1,0 +1,3 @@
+dependencies {
+    provided files('libs/moments-sdk-latest.jar')
+}
