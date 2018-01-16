@@ -24,16 +24,19 @@ public class MomentsPlugin extends CordovaPlugin {
 
         if (action.equals("initialize")) {
             String api_key = data.getString(0);
-            verifyPermissions();
-            momentsClient = MomentsClient.getInstance(this.cordova.getActivity(), api_key);
-            if (momentsClient != null) {
-                if (momentsClient.isConnected()) {
-                    callbackContext.success("isConnected - API_KEY: " + api_key);
-                } else {
-                    callbackContext.success("is Not Connected - API_KEY: " + api_key);
-                }
+            if (!verifyPermissions()) {
+                callbackContext.error("Error, needed permissions not granted");
             } else {
-                callbackContext.error("Error, momentsClient == null - api_key: " + api_key);
+                momentsClient = MomentsClient.getInstance(this.cordova.getActivity(), api_key);
+                if (momentsClient != null) {
+                    if (momentsClient.isConnected()) {
+                        callbackContext.success("isConnected - API_KEY: " + api_key);
+                    } else {
+                        callbackContext.success("is Not Connected - API_KEY: " + api_key);
+                    }
+                } else {
+                    callbackContext.error("Error, momentsClient == null - api_key: " + api_key);
+                }
             }
             return true;
 
@@ -44,12 +47,13 @@ public class MomentsPlugin extends CordovaPlugin {
         }
     }
 
-    public void verifyPermissions() {
+    public boolean verifyPermissions() {
         // Check if we have write permission
         // and if we don't prompt the user
         if (!cordova.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
             cordova.requestPermissions(this, REQUEST_LOCATION, permissions);
         }
+        return cordova.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) && cordova.hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
     }
 
     public void onDestroy() {
