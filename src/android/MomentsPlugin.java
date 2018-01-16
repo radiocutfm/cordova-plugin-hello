@@ -37,7 +37,7 @@ public class MomentsPlugin extends CordovaPlugin {
                             callbackContext.error("Error: needed permissions (ACCESS_COARSE_LOCATION) not granted");
                         }
                     } else {
-                        momentsClient = MomentsClient.getInstance(this.cordova.getActivity(), api_key);
+                        momentsClient = MomentsClient.getInstance(cordova.getActivity(), api_key);
                         if (momentsClient != null) {
                             if (momentsClient.isConnected()) {
                                 callbackContext.success("isConnected - API_KEY: " + api_key);
