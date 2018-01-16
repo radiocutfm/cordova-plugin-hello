@@ -30,9 +30,9 @@ public class MomentsPlugin extends CordovaPlugin {
             Log.i(TAG, "Initializing MomentsPlugin - API_KEY: '" + api_key + "'");
             if (!verifyPermissions()) {
                 if (!cordova.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    callbackContext.error("Error, needed permissions (ACCESS_FINE_LOCATION) not granted");
+                    callbackContext.error("Error: needed permissions (ACCESS_FINE_LOCATION) not granted");
                 } else {
-                    callbackContext.error("Error, needed permissions (ACCESS_COARSE_LOCATION) not granted");
+                    callbackContext.error("Error: needed permissions (ACCESS_COARSE_LOCATION) not granted");
                 }
             } else {
                 momentsClient = MomentsClient.getInstance(this.cordova.getActivity(), api_key);

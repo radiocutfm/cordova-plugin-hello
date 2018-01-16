@@ -20,6 +20,7 @@
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="MomentsPlugin">
         <param name="android-package" value="com.lotadata.moments.plugin.MomentsPlugin"/>
+        <param name="onload" value="true" />  <!-- Must Have -->
       </feature>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/*">
@@ -31,7 +32,7 @@
       <service android:name="com.lotadata.moments.MomentsService" android:exported="false"/>
     </config-file>
 
-    <source-file src="src/android/MomentsPlugin.java" target-dir="src/com/example/plugin/"/>
+    <source-file src="src/android/MomentsPlugin.java" target-dir="src/com/lotadata/moments/plugin/"/>
     <source-file src="moments-sdk-latest.jar" target-dir="libs"/>
     <framework src="src/android/extras.gradle" custom="true" type="gradleReference"/>
   </platform>
