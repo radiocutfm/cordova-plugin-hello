@@ -23,10 +23,10 @@ public class MomentsPlugin extends CordovaPlugin {
     };
 
     @Override
-    public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
+    public boolean execute(String action, JSONArray data, final CallbackContext callbackContext) throws JSONException {
 
         if (action.equals("initialize")) {
-            String api_key = data.getString(0);
+            final String api_key = data.getString(0);
             Log.i(TAG, "Initializing MomentsPlugin - API_KEY: '" + api_key + "' - In new Thread");
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
