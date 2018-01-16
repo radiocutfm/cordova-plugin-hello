@@ -23,7 +23,7 @@ public class MomentsPlugin extends CordovaPlugin {
     };
 
     private CallbackContext permissionsCallback;
-    private final String api_key;
+    private String api_key;
 
     @Override
     public boolean execute(String action, JSONArray data, final CallbackContext callbackContext) throws JSONException {
@@ -59,7 +59,6 @@ public class MomentsPlugin extends CordovaPlugin {
             return;
         }
 
-        JSONObject returnObj = new JSONObject();
         if (permissions != null && permissions.length > 0) {
             //Call checkPermission again to verify
             if (!hasAllPermissions()) {
