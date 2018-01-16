@@ -27,29 +27,24 @@ public class MomentsPlugin extends CordovaPlugin {
 
         if (action.equals("initialize")) {
             final String api_key = data.getString(0);
-            Log.i(TAG, "Initializing MomentsPlugin - API_KEY: '" + api_key + "' - In new Thread");
-            cordova.getThreadPool().execute(new Runnable() {
-                public void run() {
-                    if (!verifyPermissions()) {
-                        if (!cordova.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                            callbackContext.error("Error: needed permissions (ACCESS_FINE_LOCATION) not granted");
-                        } else {
-                            callbackContext.error("Error: needed permissions (ACCESS_COARSE_LOCATION) not granted");
-                        }
-                    } else {
-                        momentsClient = MomentsClient.getInstance(cordova.getActivity(), api_key);
-                        if (momentsClient != null) {
-                            if (momentsClient.isConnected()) {
-                                callbackContext.success("isConnected - API_KEY: " + api_key);
-                            } else {
-                                callbackContext.success("is Not Connected - API_KEY: " + api_key);
-                            }
-                        } else {
-                            callbackContext.error("Error, permission OK, momentsClient == null - api_key: " + api_key);
-                        }
-                    }
+            if (!verifyPermissions()) {
+                if (!cordova.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    callbackContext.error("Error: needed permissions (ACCESS_FINE_LOCATION) not granted");
+                } else {
+                    callbackContext.error("Error: needed permissions (ACCESS_COARSE_LOCATION) not granted");
                 }
-            });
+            } else {
+                momentsClient = MomentsClient.getInstance(cordova.getActivity(), api_key);
+                if (momentsClient != null) {
+                    if (momentsClient.isConnected()) {
+                        callbackContext.success("isConnected - API_KEY: " + api_key);
+                    } else {
+                        callbackContext.success("is Not Connected - API_KEY: " + api_key);
+                    }
+                } else {
+                    callbackContext.error("Error, permission OK, momentsClient == null - api_key: " + api_key);
+                }
+            }
             return true;
         } else {
             
