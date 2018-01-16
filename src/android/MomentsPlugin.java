@@ -25,7 +25,11 @@ public class MomentsPlugin extends CordovaPlugin {
         if (action.equals("initialize")) {
             String api_key = data.getString(0);
             if (!verifyPermissions()) {
-                callbackContext.error("Error, needed permissions not granted");
+                if (!cordova.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    callbackContext.error("Error, needed permissions (ACCESS_FINE_LOCATION) not granted");
+                } else {
+                    callbackContext.error("Error, needed permissions (ACCESS_COARSE_LOCATION) not granted");
+                }
             } else {
                 momentsClient = MomentsClient.getInstance(this.cordova.getActivity(), api_key);
                 if (momentsClient != null) {
@@ -35,7 +39,7 @@ public class MomentsPlugin extends CordovaPlugin {
                         callbackContext.success("is Not Connected - API_KEY: " + api_key);
                     }
                 } else {
-                    callbackContext.error("Error, momentsClient == null - api_key: " + api_key);
+                    callbackContext.error("Error, pms OK, momentsClient == null - api_key: " + api_key);
                 }
             }
             return true;
@@ -50,7 +54,8 @@ public class MomentsPlugin extends CordovaPlugin {
     public boolean verifyPermissions() {
         // Check if we have write permission
         // and if we don't prompt the user
-        if (!cordova.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (!cordova.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) || 
+            !cordova.hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION) ) {
             cordova.requestPermissions(this, REQUEST_LOCATION, permissions);
         }
         return cordova.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) && cordova.hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
