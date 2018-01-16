@@ -63,7 +63,7 @@ public class MomentsPlugin extends CordovaPlugin {
         // and if we don't prompt the user
         if (!cordova.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) || 
             !cordova.hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION) ) {
-            Log.i(TAG, "Asking for permissions");
+            Log.i(TAG, "Asking for permissions " + permissions[0] + " and " + permissions[1]);
             cordova.requestPermissions(this, REQUEST_LOCATION, permissions);
         }
         return cordova.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) && cordova.hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
