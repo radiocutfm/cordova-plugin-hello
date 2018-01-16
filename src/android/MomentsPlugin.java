@@ -22,46 +22,90 @@ public class MomentsPlugin extends CordovaPlugin {
         Manifest.permission.ACCESS_COARSE_LOCATION
     };
 
+    private CallbackContext permissionsCallback;
+    private final String api_key;
+
     @Override
     public boolean execute(String action, JSONArray data, final CallbackContext callbackContext) throws JSONException {
 
         if (action.equals("initialize")) {
-            final String api_key = data.getString(0);
-            if (!verifyPermissions()) {
-                if (!cordova.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    callbackContext.error("Error: needed permissions (ACCESS_FINE_LOCATION) not granted");
-                } else {
-                    callbackContext.error("Error: needed permissions (ACCESS_COARSE_LOCATION) not granted");
-                }
-            } else {
-                momentsClient = MomentsClient.getInstance(cordova.getActivity(), api_key);
-                if (momentsClient != null) {
-                    if (momentsClient.isConnected()) {
-                        callbackContext.success("isConnected - API_KEY: " + api_key);
-                    } else {
-                        callbackContext.success("is Not Connected - API_KEY: " + api_key);
+            api_key = data.getString(0);
+            Log.i(TAG, "Initializing MomentsPlugin - In new Thread");
+            cordova.getThreadPool().execute(new Runnable() {
+                public void run() {
+                    if (verifyPermissions(callbackContext)) {
+                        momentsClient = MomentsClient.getInstance(cordova.getActivity(), api_key);
+                        if (momentsClient != null) {
+                            if (momentsClient.isConnected()) {
+                                callbackContext.success("isConnected");
+                            } else {
+                                callbackContext.success("is Not Connected");
+                            }
+                        } else {
+                            callbackContext.error("Error, permission OK but momentsClient still == null");
+                        }
                     }
-                } else {
-                    callbackContext.error("Error, permission OK, momentsClient == null - api_key: " + api_key);
                 }
-            }
+            });
             return true;
         } else {
-            
             return false;
-
         }
     }
 
-    public boolean verifyPermissions() {
-        // Check if we have write permission
+    @Override
+    public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
+        if (permissionsCallback == null) {
+            return;
+        }
+
+        JSONObject returnObj = new JSONObject();
+        if (permissions != null && permissions.length > 0) {
+            //Call checkPermission again to verify
+            if (!hasAllPermissions()) {
+                permissionsCallback.error("Error, ACCESS_COARSE_LOCATION or ACCESS_FINE_LOCATION permissions not granted");
+            } else {
+                if (momentsClient == null) {
+                    momentsClient = MomentsClient.getInstance(cordova.getActivity(), api_key);
+                }
+                if (momentsClient != null) {
+                    if (momentsClient.isConnected()) {
+                        permissionsCallback.success("isConnected");
+                    } else {
+                        permissionsCallback.success("is Not Connected");
+                    }
+                } else {
+                    permissionsCallback.error("Error, permission OK but momentsClient still == null");
+                }
+            }
+        } else {
+            permissionsCallback.error("Unknown error with permissions");
+        }
+        permissionsCallback = null;
+    }
+
+    private boolean hasAllPermissions() {
+        for (String permission : permissions) {
+            if(!cordova.hasPermission(permission)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean verifyPermissions(final CallbackContext callbackContext) {
+        // Check if we have the permissions
         // and if we don't prompt the user
-        if (!cordova.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) || 
-            !cordova.hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION) ) {
+        // Return true if the permissions are granted. Else returns false and the authorization or not arrives on
+        // call to method onRequestPermissionResult
+        if (!hasAllPermissions()) {
             Log.i(TAG, "Asking for permissions " + permissions[0] + " and " + permissions[1]);
             cordova.requestPermissions(this, REQUEST_LOCATION, permissions);
+            permissionsCallback = callbackContext;
+            return hasAllPermissions();
+        } else {
+            return true;
         }
-        return cordova.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) && cordova.hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
     }
 
     public void onDestroy() {
