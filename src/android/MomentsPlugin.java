@@ -59,6 +59,10 @@ public class MomentsPlugin extends CordovaPlugin {
             return;
         }
 
+        if (requestCode != REQUEST_LOCATION) {
+            return;
+        }
+
         if (permissions != null && permissions.length > 0) {
             //Call checkPermission again to verify
             if (!hasAllPermissions()) {
