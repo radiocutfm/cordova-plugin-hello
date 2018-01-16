@@ -4,12 +4,15 @@ import org.apache.cordova.*;
 
 import android.Manifest;
 
+import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import com.lotadata.moments.MomentsClient;
 import com.lotadata.moments.Moments;
 
 public class MomentsPlugin extends CordovaPlugin {
+    private static final String TAG = "MomentsPlugin";
+
     private Moments momentsClient = null;
 
     // Location Permissions
@@ -24,6 +27,7 @@ public class MomentsPlugin extends CordovaPlugin {
 
         if (action.equals("initialize")) {
             String api_key = data.getString(0);
+            Log.i(TAG, "Initializing MomentsPlugin - API_KEY: '" + api_key + "'");
             if (!verifyPermissions()) {
                 if (!cordova.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
                     callbackContext.error("Error, needed permissions (ACCESS_FINE_LOCATION) not granted");
@@ -56,6 +60,7 @@ public class MomentsPlugin extends CordovaPlugin {
         // and if we don't prompt the user
         if (!cordova.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) || 
             !cordova.hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION) ) {
+            Log.i(TAG, "Asking for permissions");
             cordova.requestPermissions(this, REQUEST_LOCATION, permissions);
         }
         return cordova.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) && cordova.hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
