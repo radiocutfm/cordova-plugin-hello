@@ -2,6 +2,9 @@ package com.lotadata.moments.plugin;
 
 import org.apache.cordova.*;
 
+import java.lang.NullPointerException;
+import java.lang.IllegalArgumentException;
+
 import android.Manifest;
 
 import android.util.Log;
@@ -47,6 +50,36 @@ public class MomentsPlugin extends CordovaPlugin {
                     }
                 }
             });
+            return true;
+        } else if (action.equals("recordEvent")) {
+            if (momentsClient == null) {
+                callbackContext.error("Not initialized!");
+            } else {
+                final String eventName = data.getString(0);
+                if (data.length > 1) {
+                    final Double eventData = data.getDouble(1);
+                    momentsClient.recordEvent(eventName, eventData);
+                } else {
+                    momentsClient.recordEvent(eventName);
+                }
+                callbackContext.success("Event recorded");
+            }
+            return true;
+        } else if (action.equals("setTrackingMode")) {
+            if (momentsClient == null) {
+                callbackContext.error("Not initialized!");
+            } else {
+                final String trackingMode = data.getString(0);
+                try {
+                    TrackingMode mode = TrackingMode.valueOf(trackingMode);
+                } catch (IllegalArgumentException err) {
+                    callbackContext("Invalid trackingMode");
+                } catch (NullPointerException err) {
+                    callbackContext("trackingMode not specified");
+                }
+                momentsClient.setTrackingMode(mode);
+                callbackContext.success("setTrackingMode OK");
+            }
             return true;
         } else {
             return false;
