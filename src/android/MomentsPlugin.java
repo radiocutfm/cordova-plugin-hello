@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import com.lotadata.moments.MomentsClient;
 import com.lotadata.moments.Moments;
+import com.lotadata.moments.TrackingMode;
 
 public class MomentsPlugin extends CordovaPlugin {
     private static final String TAG = "MomentsPlugin";
@@ -56,7 +57,7 @@ public class MomentsPlugin extends CordovaPlugin {
                 callbackContext.error("Not initialized!");
             } else {
                 final String eventName = data.getString(0);
-                if (data.length > 1) {
+                if (data.length() > 1) {
                     final Double eventData = data.getDouble(1);
                     momentsClient.recordEvent(eventName, eventData);
                 } else {
@@ -73,9 +74,9 @@ public class MomentsPlugin extends CordovaPlugin {
                 try {
                     TrackingMode mode = TrackingMode.valueOf(trackingMode);
                 } catch (IllegalArgumentException err) {
-                    callbackContext("Invalid trackingMode");
+                    callbackContext.error("Invalid trackingMode");
                 } catch (NullPointerException err) {
-                    callbackContext("trackingMode not specified");
+                    callbackContext.error("trackingMode not specified");
                 }
                 momentsClient.setTrackingMode(mode);
                 callbackContext.success("setTrackingMode OK");
