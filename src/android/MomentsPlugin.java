@@ -71,15 +71,18 @@ public class MomentsPlugin extends CordovaPlugin {
                 callbackContext.error("Not initialized!");
             } else {
                 final String trackingMode = data.getString(0);
+                TrackingMode mode = null;
                 try {
-                    TrackingMode mode = TrackingMode.valueOf(trackingMode);
+                    mode = TrackingMode.valueOf(trackingMode);
                 } catch (IllegalArgumentException err) {
                     callbackContext.error("Invalid trackingMode");
                 } catch (NullPointerException err) {
                     callbackContext.error("trackingMode not specified");
                 }
-                momentsClient.setTrackingMode(mode);
-                callbackContext.success("setTrackingMode OK");
+                if (mode != null) {
+                    momentsClient.setTrackingMode(mode);
+                    callbackContext.success("setTrackingMode OK");
+                }
             }
             return true;
         } else {
