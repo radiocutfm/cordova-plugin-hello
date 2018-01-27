@@ -28,6 +28,7 @@
 
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
       <service android:name="com.lotadata.moments.MomentsService" android:exported="false"/>
+      <meta-data android:name="com.lotadata.moments.API_KEY" android:value="$API_KEY"/>
     </config-file>
 
     <source-file src="src/android/MomentsPlugin.java" target-dir="src/com/lotadata/moments/plugin/"/>
