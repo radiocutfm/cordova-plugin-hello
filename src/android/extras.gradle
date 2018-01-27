@@ -1,4 +1,4 @@
 dependencies {
     provided files('libs/moments-sdk-latest.jar')
-    compile 'com.google.android.gms:play-services-location:5.+'
+    compile 'com.google.android.gms:play-services-location:7.3.0'
 }
