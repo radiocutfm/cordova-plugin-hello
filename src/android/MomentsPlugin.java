@@ -62,7 +62,7 @@ public class MomentsPlugin extends CordovaPlugin {
             });
             return true;
         } else if (action.equals("verifyPermissions")) {
-            callbackContext.success(verifyPermissions(null));
+            callbackContext.success(verifyPermissions(null) ? "true" : "false");
             return true;
         } else if (action.equals("recordEvent")) {
             if (momentsClient == null) {
