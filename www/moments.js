@@ -12,6 +12,9 @@ module.exports = {
     },
     setTrackingMode: function (trackingMode, successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, "MomentsPlugin", "setTrackingMode", [trackingMode]);
+    },
+    verifyPermissions: function (successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "MomentsPlugin", "verifyPermissions", []);
     }
     // TODO: add more moments SDK functions
 };
