@@ -8,6 +8,7 @@
   <engines>
     <engine name="cordova" version=">=3.4.0"/>
   </engines>
+  <preference name="API_KEY" />
 
   <asset src="www/moments.js" target="js/moments.js"/>
 
