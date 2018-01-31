@@ -23,9 +23,7 @@ public class MomentsPlugin extends CordovaPlugin {
     private static final int REQUEST_LOCATION = 2342;
     public static String[] permissions = {
         Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.READ_PHONE_STATE,
-        Manifest.permission.ACCESS_WIFI_STATE
+        Manifest.permission.ACCESS_COARSE_LOCATION
     };
 
     public static String[] requiredPermissions = {
