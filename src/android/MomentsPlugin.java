@@ -28,6 +28,11 @@ public class MomentsPlugin extends CordovaPlugin {
         Manifest.permission.ACCESS_WIFI_STATE
     };
 
+    public static String[] requiredPermissions = {
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    };
+
     private CallbackContext permissionsCallback;
     private String api_key;
 
@@ -143,7 +148,7 @@ public class MomentsPlugin extends CordovaPlugin {
     }
 
     private boolean hasAllPermissions() {
-        for (String permission : permissions) {
+        for (String permission : requiredPermissions) {
             if(!cordova.hasPermission(permission)) {
                 return false;
             }

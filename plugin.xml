@@ -14,7 +14,7 @@
 
   <platform name="android">
     <js-module src="www/moments.js" name="moments">
-      <clobbers target="cordova.plugins.moments" />
+      <clobbers target="window.plugins.moments" />
     </js-module>
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="MomentsPlugin">
