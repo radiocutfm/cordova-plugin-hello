@@ -13,6 +13,9 @@ module.exports = {
     setTrackingMode: function (trackingMode, successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, "MomentsPlugin", "setTrackingMode", [trackingMode]);
     },
+    bestKnownLocation: function (successCallback, errorCallback) {
+        cordova.exec(successCallback, errorCallback, "MomentsPlugin", "bestKnownLocation", []);
+    },
     verifyPermissions: function (successCallback, errorCallback) {
         cordova.exec(successCallback, errorCallback, "MomentsPlugin", "verifyPermissions", []);
     }
