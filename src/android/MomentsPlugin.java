@@ -52,7 +52,7 @@ public class MomentsPlugin extends CordovaPlugin {
             Log.i(TAG, "Initializing MomentsPlugin - In new Thread");
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
-                    if (verifyPermissions(callbackContext)) {
+                    if (verifyPermissions(callbackContext, true)) {
                         Log.i(TAG, "Permissions OK, not getInstance disabled");
                         if (api_key.equals("")) {
                             momentsClient = MomentsClient.getInstance(cordova.getActivity());
@@ -73,7 +73,8 @@ public class MomentsPlugin extends CordovaPlugin {
             });
             return true;
         } else if (action.equals("verifyPermissions")) {
-            callbackContext.success(verifyPermissions(null) ? "true" : "false");
+            boolean ask = data.length() == 1 ? data.getBoolean(0) : true;
+            callbackContext.success(verifyPermissions(null, ask) ? "true" : "false");
             return true;
         } else if (action.equals("recordEvent")) {
             if (momentsClient == null) {
@@ -191,15 +192,17 @@ public class MomentsPlugin extends CordovaPlugin {
         return true;
     }
 
-    public boolean verifyPermissions(final CallbackContext callbackContext) {
+    public boolean verifyPermissions(final CallbackContext callbackContext, boolean ask) {
         // Check if we have the permissions
         // and if we don't prompt the user
         // Return true if the permissions are granted. Else returns false and the authorization or not arrives on
         // call to method onRequestPermissionResult
         if (!hasAllPermissions()) {
             Log.i(TAG, "Asking for permissions " + permissions[0] + " and " + permissions[1]);
-            cordova.requestPermissions(this, REQUEST_LOCATION, permissions);
-            permissionsCallback = callbackContext;
+            if (ask) {
+                cordova.requestPermissions(this, REQUEST_LOCATION, permissions);
+                permissionsCallback = callbackContext;
+            }
             return hasAllPermissions();
         } else {
             return true;
