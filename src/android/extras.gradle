@@ -1,7 +1,7 @@
 repositories {
   mavenCentral()
   maven {
-      'https://apks.radiocut.fm/maven'
+      url 'https://apks.radiocut.fm/maven'
   }
 }
 
