@@ -35,7 +35,7 @@
     </config-file>
 
     <source-file src="src/android/MomentsPlugin.java" target-dir="src/com/lotadata/moments/plugin/"/>
-    <source-file src="moments-sdk-latest.jar" target-dir="libs"/>
+    <resource-file src="lotadata-sdk-latest.aar" target-dir="libs"/>
     <framework src="src/android/extras.gradle" custom="true" type="gradleReference"/>
   </platform>
 </plugin>
