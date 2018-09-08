@@ -38,7 +38,6 @@ public class MomentsPlugin extends CordovaPlugin {
     };
 
     private CallbackContext permissionsCallback;
-    private String api_key;
 
     @Override
     public boolean execute(String action, JSONArray data, final CallbackContext callbackContext) throws JSONException {
@@ -48,17 +47,12 @@ public class MomentsPlugin extends CordovaPlugin {
                 momentsClient.disconnect();
                 momentsClient = null;
             }
-            api_key = data.getString(0);
             Log.i(TAG, "Initializing MomentsPlugin - In new Thread");
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
                     if (verifyPermissions(callbackContext, true)) {
                         Log.i(TAG, "Permissions OK, not getInstance disabled");
-                        if (api_key.equals("")) {
-                            momentsClient = MomentsClient.getInstance(cordova.getActivity());
-                        } else {
-                            momentsClient = MomentsClient.getInstance(cordova.getActivity(), api_key);
-                        }
+                        momentsClient = MomentsClient.getInstance(cordova.getActivity());
                         if (momentsClient != null) {
                             if (momentsClient.isConnected()) {
                                 callbackContext.success("isConnected");
@@ -104,7 +98,7 @@ public class MomentsPlugin extends CordovaPlugin {
                     callbackContext.error("trackingMode not specified");
                 }
                 if (mode != null) {
-                    momentsClient.setTrackingMode(mode);
+                    // momentsClient.setTrackingMode(mode); -- Not working any more
                     callbackContext.success("setTrackingMode OK");
                 }
             }
@@ -161,11 +155,7 @@ public class MomentsPlugin extends CordovaPlugin {
                 permissionsCallback.error("Error, ACCESS_COARSE_LOCATION or ACCESS_FINE_LOCATION permissions not granted");
             } else {
                 if (momentsClient == null) {
-                    if (api_key.equals("")) {
-                        momentsClient = MomentsClient.getInstance(cordova.getActivity());
-                    } else {
-                        momentsClient = MomentsClient.getInstance(cordova.getActivity(), api_key);
-                    }
+                    momentsClient = MomentsClient.getInstance(cordova.getActivity());
                 }
                 if (momentsClient != null) {
                     if (momentsClient.isConnected()) {
